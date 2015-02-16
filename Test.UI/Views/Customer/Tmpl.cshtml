@@ -1,0 +1,22 @@
+﻿@using Incoding.MvcContrib
+@using Test.UI.Operations
+@{
+    using (var template = Html.Incoding().Template<GetCustomersQuery.Response>())
+    {
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+            </tr>
+            </thead>
+            @using (var each = template.ForEach())
+            {
+                <tr>
+                    <td>@each.For(r => r.Name)</td>
+                    <td>@each.For(r => r.sdfsdurname)</td>
+                </tr>
+            }
+        </table>
+    }
+}

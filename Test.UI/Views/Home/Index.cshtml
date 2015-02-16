@@ -1,0 +1,46 @@
+@using Incoding.MvcContrib
+@using Test.UI.Operations
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string styleName = Guid.NewGuid().ToString();
+}
+
+
+
+
+@(Html.When(JqueryBind.InitIncoding)
+      .AjaxGet(Url.Dispatcher().Query(new GetCustomersQuery()).AsJson())
+      .OnSuccess(dsl =>
+      {
+          var urlTmpl = Url.Dispatcher().AsView("~/Views/Customer/Tmpl.cshtml");
+          dsl.Self().Core().Insert.WithTemplateByUrl(urlTmpl).Html();
+      })
+      .AsHtmlAttributes(new { id = "asdasd" })
+      .ToDiv())
+
+<p></p>
+
+@Html.TextBox("cust",null,
+    Html.When(JqueryBind.KeyUp)
+        .AjaxGet(Url.Dispatcher().Query(new GetSimilairNamesQuery()
+        {
+            RequiredName = Selector.Jquery.Self().Val()
+        }).AsJson())
+        .OnSuccess(dsl =>
+        {
+            var urlTmpl = Url.Dispatcher().AsView("~/Views/Customer/Tmpl.cshtml");
+            dsl.WithId("asdasd").Core().Insert.WithTemplateByUrl(urlTmpl).Append();
+       
+        }).AsHtmlAttributes())
+
+<p></p>
+
+@(Html.When(JqueryBind.Click)
+      .AjaxGet(Url.Dispatcher().Push(new GetCustomersCommand()))
+
+      .OnSuccess(dsl =>
+      {
+          dsl.WithId("asdasd").Core().Trigger.Invoke(JqueryBind.Incoding);
+      })
+      .AsHtmlAttributes()
+      .ToButton("Add User"))
