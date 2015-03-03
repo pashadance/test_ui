@@ -150,7 +150,7 @@
     <Compile Include="Operations\Entity\TimeTrack.cs" />
     <Compile Include="Operations\Query\GetResultQuery.cs" />
     <Compile Include="Operations\Query\GetSimilairNamesQuery.cs" />
-    <Compile Include="Operations\Command\GetCustomersCommand.cs" />
+    <Compile Include="Operations\Command\ItemAppendCommand.cs" />
     <Compile Include="Operations\Entity\User.cs" />
     <Compile Include="Operations\Query\GetCustomersQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

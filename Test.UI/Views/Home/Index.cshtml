@@ -67,7 +67,7 @@
         
         <div style="position: relative; top:5px; left:30px">
             @(Html.When(JqueryBind.Click)
-                  .AjaxGet(Url.Dispatcher().Push(new GetCustomersCommand(
+                  .AjaxGet(Url.Dispatcher().Push(new ItemAppendCommand(
                       Selector.Jquery.Id(txt_name_id).Val(),
                       Selector.Jquery.Id(txt_sername_id).Val(),
                       Selector.Jquery.Id(dd_count_id).Val(),

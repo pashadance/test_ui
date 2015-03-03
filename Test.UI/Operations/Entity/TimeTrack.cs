@@ -30,8 +30,8 @@ namespace Test.UI.Operations.Entity
                 Map(r => r.CostOne);
                 Map(r => r.Cost);
                 Map(r => r.Active);
-               // Map(r => r.IdUser);
-                References(r => r.User, "IdUser");
+                Map(r => r.IdUser);//  ??
+               // References(r => r.User, "IdUser");
             }
         }
     }

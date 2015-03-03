@@ -15,7 +15,6 @@
             <thead>
             <tr>
                 <th>Имя</th><th>Фамилия</th><th>Количество</th><th>Тариф</th><th>Время_старта</th><th></th>
-
             </tr>
             </thead>
             @using (var each = template.ForEach())
@@ -27,14 +26,11 @@
                     <td>@each.For(r=>r.Price)</td>
                     <td>@each.For(r=>r.Start_time)</td>
                     <td>
-                        
-                        
-
                         @(Html.When(JqueryBind.Click)
                         
-                        .AjaxPost(Url.Dispatcher().Push(new DeleteCustomerByIdCommand()
+                        .AjaxPost(Url.Dispatcher().Push(new DeactivateTimeTrackByIdCommand()
                               {
-                                 delete_id = each.For(r=>r.Id)
+                                 deactivate_id = each.For(r=>r.Id)
                               }))
                               
                               .OnSuccess(dsl =>
