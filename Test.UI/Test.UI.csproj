@@ -144,10 +144,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Bootstrapper.cs" />
-    <Compile Include="Operations\GetSimilairNamesQuery.cs" />
-    <Compile Include="Operations\GetCustomersCommand.cs" />
-    <Compile Include="Operations\Customer.cs" />
-    <Compile Include="Operations\GetCustomersQuery.cs" />
+    <Compile Include="Operations\Command\AppendEntitiResultCommand.cs" />
+    <Compile Include="Operations\Command\DeleteEntityByIdCommand.cs" />
+    <Compile Include="Operations\Entity\Result.cs" />
+    <Compile Include="Operations\Entity\TimeTrack.cs" />
+    <Compile Include="Operations\Query\GetResultQuery.cs" />
+    <Compile Include="Operations\Query\GetSimilairNamesQuery.cs" />
+    <Compile Include="Operations\Command\GetCustomersCommand.cs" />
+    <Compile Include="Operations\Entity\User.cs" />
+    <Compile Include="Operations\Query\GetCustomersQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +194,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Customer\Tmpl.cshtml" />
+    <Content Include="Views\Customer\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

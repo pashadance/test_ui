@@ -28,10 +28,10 @@ namespace Test.UI
             {
                 //Записываем непосредственно исключение, вызвавшее данное, в
                 //Session для дальнейшего использования
-                Session["ErrorException"] = exception.InnerException;
+               // Session["ErrorException"] = exception.InnerException;
             }
-            Server.ClearError();
-            Response.Redirect("~/Views/Errors/Error.cshtml");
+            //Server.ClearError();
+            //Response.Redirect("~/Views/Errors/Error.cshtml");
             
            // Response.Clear();
 

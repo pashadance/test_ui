@@ -1,4 +1,6 @@
-﻿namespace Test.UI.Operations
+﻿using Test.UI.Operations.Entity;
+
+namespace Test.UI.Operations
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -11,24 +13,14 @@
         public class Response
         {
             public string Result { get; set; }
-   
-
-
         }
 
         protected override List<GetCustomersQuery.Response> ExecuteResult()
         {
-
-
-            List<Customer> Customers = Repository.Query<Customer>()
-                             .ToList();
-
-
-
-
+            List<User> Customers = Repository.Query<User>().ToList();
             return
                 Customers.Where(customer => customer.Name.Contains(RequiredName))
-                    .Select(customer => new GetCustomersQuery.Response() {Name = customer.Name,sdfsdurname = "asdasdasda"}).ToList();
+                    .Select(customer => new GetCustomersQuery.Response() {Name = customer.Name,Sername = "asdasdasda"}).ToList();
 
 
         }

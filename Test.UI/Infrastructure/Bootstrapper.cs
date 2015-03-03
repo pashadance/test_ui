@@ -56,8 +56,8 @@ namespace Test.UI
                                                                                                      })));
 
             var databaseManager = IoCFactory.Instance.TryResolve<IManagerDataBase>();
-            if(!databaseManager.IsExist())
-                databaseManager.Create();
+          if(!databaseManager.IsExist())
+               databaseManager.Create();
 
             ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new IncValidatorFactory()));
             FluentValidationModelValidatorProvider.Configure();

@@ -1,46 +1,92 @@
+﻿@using System.Collections
+@using System.Web.UI.WebControls
+@using Incoding.Extensions
 @using Incoding.MvcContrib
 @using Test.UI.Operations
+@using Test.UI.Operations.Command
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     string styleName = Guid.NewGuid().ToString();
+
+    string table_id = "4F1C89FC-D8F4-46A1-B82B-035B1530277B";
+    string txt_name_id = "2B08527B-1C00-4F8B-93EA-22745779CD8A";
+    string txt_sername_id = "EC3EBC87-AAF2-4E45-B887-1043DA37BEA9";
+    string dd_count_id = "908D0C72-8DEF-40B4-AF01-837BDC0FE529";
+    string dd_price_id = "A4C50261-7095-41A4-903B-1D31BC21E5AF";
+
+   List< SelectListItem >selectList_count = new List<SelectListItem>();
+    for (int i = 1; i < 51; i++)
+    {
+        selectList_count.Add(new SelectListItem() {Text = i.ToString(),Value = i.ToString() });
+    }
+    List<SelectListItem> selectList_price = new List<SelectListItem>();
+    for (int i = 100; i < 301; i+=10)
+    {
+        selectList_price.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString() });
+    }
+  
 }
-
-
-
-
-@(Html.When(JqueryBind.InitIncoding)
-      .AjaxGet(Url.Dispatcher().Query(new GetCustomersQuery()).AsJson())
-      .OnSuccess(dsl =>
-      {
-          var urlTmpl = Url.Dispatcher().AsView("~/Views/Customer/Tmpl.cshtml");
-          dsl.Self().Core().Insert.WithTemplateByUrl(urlTmpl).Html();
-      })
-      .AsHtmlAttributes(new { id = "asdasd" })
-      .ToDiv())
-
-<p></p>
-
-@Html.TextBox("cust",null,
-    Html.When(JqueryBind.KeyUp)
-        .AjaxGet(Url.Dispatcher().Query(new GetSimilairNamesQuery()
-        {
-            RequiredName = Selector.Jquery.Self().Val()
-        }).AsJson())
-        .OnSuccess(dsl =>
-        {
-            var urlTmpl = Url.Dispatcher().AsView("~/Views/Customer/Tmpl.cshtml");
-            dsl.WithId("asdasd").Core().Insert.WithTemplateByUrl(urlTmpl).Append();
+<div style="position: absolute; left:10%;top:10%">
+    <div style="position: absolute; width: 450px; padding: 5px; left:190px; background-color: #d5d5d5; border: solid 4px #708090;">
        
-        }).AsHtmlAttributes())
+         @(Html.When(JqueryBind.InitIncoding)
+            .AjaxGet(Url.Dispatcher().Query(new GetCustomersQuery()).AsJson())
+            .OnSuccess(dsl =>
+            {
+                var urlTmpl = Url.Dispatcher().AsView("~/Views/Customer/Tmpl.cshtml");
+                dsl.Self().Core().Insert.WithTemplateByUrl(urlTmpl).Html();
+            })
+            .AsHtmlAttributes(new { id = table_id })
+            .ToDiv())
+    </div>
+    
+    <div style="position: absolute; padding: 5px; height:190px; width: 170px; border: solid 4px #708090; background-color: #c0c0c0">
+        
+        
+        <div style="padding-bottom:5px">
+            Введите имя
+            <div tyle="position: relative">@(Html.TextBox("name",null,new { id = txt_name_id}))</div>
+        </div>
+        
+        <div style=" padding-bottom:5px">
+            Введите фамилию 
+            <div style="position: relative;">@(Html.TextBox("sername",null,new { id = txt_sername_id})) </div>
+        </div>
+        
+        <div style="padding-bottom:5px">
+            Количество 
+            <div style="position: relative; left:15px">@(
+    Html.DropDownList("count",selectList_count,new { id = dd_count_id, name ="count"})) </div>
+        </div >
+        
+        <div style="position:absolute;left:95px; top:95px; padding-bottom:5px">
+            Тариф
+            <div style="position: relative">@(
+    Html.DropDownList("price",selectList_price,new { id = dd_price_id, name="price"})) </div>
+        </div>
+        
+        <div style="position: relative; top:5px; left:30px">
+            @(Html.When(JqueryBind.Click)
+                  .AjaxGet(Url.Dispatcher().Push(new GetCustomersCommand(
+                      Selector.Jquery.Id(txt_name_id).Val(),
+                      Selector.Jquery.Id(txt_sername_id).Val(),
+                      Selector.Jquery.Id(dd_count_id).Val(),
+                      Selector.Jquery.Name("price").Val()
+                      )))
 
-<p></p>
-
-@(Html.When(JqueryBind.Click)
-      .AjaxGet(Url.Dispatcher().Push(new GetCustomersCommand()))
-
-      .OnSuccess(dsl =>
-      {
-          dsl.WithId("asdasd").Core().Trigger.Invoke(JqueryBind.Incoding);
-      })
-      .AsHtmlAttributes()
-      .ToButton("Add User"))
+                  .OnSuccess(dsl =>
+                  {
+                      dsl.WithId(table_id).Core().Trigger.Invoke(JqueryBind.Incoding);
+                      dsl.WithId(txt_name_id).Core().JQuery.Attributes.Val(string.Empty);
+                      dsl.WithId(txt_sername_id).Core().JQuery.Attributes.Val(string.Empty);
+                      dsl.WithId(dd_count_id).Core().JQuery.Attributes.Val(1.ToString());
+                  })
+                  .AsHtmlAttributes()
+                  .ToButton("Добавить"))
+        </div>
+    </div>
+    
+    <div id="89E66E7D-B3DA-46E5-ACDD-E3025EFD2033" style="position: absolute; left: 660px; width: 180px; height: 200px; background-color: #c8c8c8; border: solid 3px #708090 ">
+        
+    </div>
+</div>

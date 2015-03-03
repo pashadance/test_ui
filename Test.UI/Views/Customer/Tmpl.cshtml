@@ -1,21 +1,53 @@
 ﻿@using Incoding.MvcContrib
 @using Test.UI.Operations
+@using Test.UI.Operations.Command
+@using Test.UI.Operations.Query
+
+
+
+
 @{
+    string table_id = " D7A6C343-5944-4BB9-84E0-50F0287490C6";
+    //string result_id = "BFB3205E-F956-4C45-AF4C-3D07CC910349";
     using (var template = Html.Incoding().Template<GetCustomersQuery.Response>())
     {
-        <table>
+        <table id="@table_id">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Surname</th>
+                <th>Имя</th><th>Фамилия</th><th>Количество</th><th>Тариф</th><th>Время_старта</th><th></th>
+
             </tr>
             </thead>
             @using (var each = template.ForEach())
             {
                 <tr>
                     <td>@each.For(r => r.Name)</td>
-                    <td>@each.For(r => r.sdfsdurname)</td>
+                    <td>@each.For(r => r.Sername)</td>
+                    <td>@each.For(r=>r.Count)</td>
+                    <td>@each.For(r=>r.Price)</td>
+                    <td>@each.For(r=>r.Start_time)</td>
+                    <td>
+                        
+                        
+
+                        @(Html.When(JqueryBind.Click)
+                        
+                        .AjaxPost(Url.Dispatcher().Push(new DeleteCustomerByIdCommand()
+                              {
+                                 delete_id = each.For(r=>r.Id)
+                              }))
+                              
+                              .OnSuccess(dsl =>
+                              {
+                                  //dsl.WithId(result_id).Core().Trigger.Invoke(JqueryBind.InitIncoding);
+                                  dsl.With(selector => selector.Self().Closest(r => r.Tag(HtmlTag.Tr)))
+                                      .Core().JQuery.Manipulation.Remove();
+                              })
+                              .AsHtmlAttributes()
+                              .ToButton("STOP"))
+                    </td>
                 </tr>
+                
             }
         </table>
     }
