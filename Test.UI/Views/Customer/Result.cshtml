@@ -1,31 +1,51 @@
-﻿@using Incoding.MvcContrib
-@using Test.UI.Operations
-@using Test.UI.Operations.Command
+﻿@using Incoding.Extensions
+@using Incoding.MvcContrib
 @using Test.UI.Operations.Query
 
-
-
-@{/*
+@{
      string div_result_id = "D95BD840-8D65-4138-A2F2-BE345780F1D9";
-     using (var template = Html.Incoding().Template<GetResultQuery.Result>())
+     using (var tem = Html.Incoding().Template<GetResultQuery.Result>())
     {
-        <div id="@div_result_id">
+        <div id="@div_result_id" style="padding: 4px">
             
-           
-            @using (var each = template.ForEach())
+            <div class="bold">РАСЧЕТ</div>
+             <p></p>
+            <style type="text/css">
+                .bold{
+                    color: #000030; 
+                    font-size:20px ; 
+                    }
+            </style>
+
+            @using (var each = tem.ForEach())
             {
+                <div class="bold"> @each.For(r => r.Sername) @each.For(r => r.Name)</div>
                 
-               <div> @each.For(r => r.Name)</div>
-               <div> @each.For(r => r.Sername)</div>
-                <div> @each.For(r => r.Count)</div>
-                <div> @each.For(r => r.Price)</div>
-                <div> @each.For(r => r.Start_time)</div>
-                <div> @each.For(r => r.End_time)</div>
-                <div> длительность</div>
-                <div> денег с каждого</div>
-                <div> денег всего</div>
+                <div class="bold">  @each.For(r => r.FatherName)</div>
+                <div>Количество: @each.For(r => r.Count)</div>
+                <div>Тариф: @each.For(r => r.Price)</div>
+                <div>Старт: @each.For(r => r.StartTime)</div>
+                <div>Стоп: @each.For(r => r.EndTime)</div>
+                <div>Длительность: @each.For(r => r.Duration)</div>
+                <div>Итог с каждого: @each.For(r => r.CostOne)</div>
+                <div class="bold">Общий итог: @each.For(r => r.Cost)</div>
             }
-        </div>*/
+            
+            <div style="position: absolute; right: 6px; top: 6px">
+                 @(Html.When(JqueryBind.Click)
+                    .Direct()
+                    .OnBegin(
+                        dsl =>
+                        {
+                            dsl.WithId(div_result_id).Core().JQuery.Manipulation.Remove();
+                            dsl.WithId("89E66E7D-B3DA-46E5-ACDD-E3025EFD2033").Core().JQuery.Css.Set("opacity", 0);
+                            dsl.WithId("85136C08-5A41-41A2-B188-30602CC0945F").Core().Trigger.Incoding();
+                        })
+                    .AsHtmlAttributes()
+                    .ToButton("OK")
+                    )
+            </div>
+       </div>
     }
     
 }

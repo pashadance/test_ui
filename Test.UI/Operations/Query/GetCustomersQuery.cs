@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Incoding.CQRS;
-using NHibernate.Linq.Functions;
 using Test.UI.Operations.Entity;
 
-namespace Test.UI.Operations
+namespace Test.UI.Operations.Query
 {
     public class GetCustomersQuery : QueryBase<List<GetCustomersQuery.Response>>
     {
@@ -13,8 +11,9 @@ namespace Test.UI.Operations
         {
             public string Id { get; set; }
             public string IdUser { get; set; }
-            public string Name { get; set; }
             public string Sername { get; set; }
+            public string Name { get; set; }
+            public string FatherName { get; set; }
             public string Count { get; set; }
             public string Price { get; set; }
             public string Start_time { get; set; }        
@@ -30,7 +29,7 @@ namespace Test.UI.Operations
                 if (timetrack.Active)
                     resp.Add(new Response()
                     {
-                        IdUser = timetrack.IdUser,
+                        IdUser = timetrack.User.Id,
                         Id = timetrack.Id,
                         Count = timetrack.Count,
                         Price = timetrack.Price,
@@ -46,8 +45,9 @@ namespace Test.UI.Operations
                 {
                     if (r.IdUser == user.Id)
                     {
-                        r.Name = user.Name;
                         r.Sername = user.Sername;
+                        r.Name = user.Name;
+                        r.FatherName = user.FatherName;
                     }
                 }
             }

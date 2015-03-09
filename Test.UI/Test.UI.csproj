@@ -145,14 +145,16 @@
     </Compile>
     <Compile Include="Infrastructure\Bootstrapper.cs" />
     <Compile Include="Operations\Command\AppendEntitiResultCommand.cs" />
-    <Compile Include="Operations\Command\DeleteEntityByIdCommand.cs" />
-    <Compile Include="Operations\Entity\Result.cs" />
+    <Compile Include="Operations\Command\DeactivateTimeTrackByIdCommand.cs" />
     <Compile Include="Operations\Entity\TimeTrack.cs" />
     <Compile Include="Operations\Query\GetResultQuery.cs" />
     <Compile Include="Operations\Query\GetSimilairNamesQuery.cs" />
     <Compile Include="Operations\Command\ItemAppendCommand.cs" />
     <Compile Include="Operations\Entity\User.cs" />
     <Compile Include="Operations\Query\GetCustomersQuery.cs" />
+    <Compile Include="Operations\Query\GetStatisticsCustomQuery.cs" />
+    <Compile Include="Operations\Query\GetStatisticsSesonQuery.cs" />
+    <Compile Include="Operations\Query\GetStatisticsTodayQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +197,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Customer\Tmpl.cshtml" />
     <Content Include="Views\Customer\Result.cshtml" />
+    <Content Include="Views\Customer\StatToday.cshtml" />
+    <Content Include="Views\Customer\StatSeason.cshtml" />
+    <Content Include="Views\Customer\StatCustom.cshtml" />
+    <Content Include="Views\Customer\statcustomresult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

@@ -9,10 +9,9 @@ namespace Test.UI.Operations.Entity
         public virtual string Price { get; set; }
         public virtual DateTime StartTime { get; set; }
         public virtual DateTime EndTime { get; set; }
-        public virtual DateTime Duration { get; set; }
+        public virtual float Duration { get; set; }
         public virtual string CostOne { get; set; }
         public virtual string Cost { get; set; }
-        public virtual string IdUser{ get; set; }
         public virtual bool Active { get; set; }
         public virtual User User { get; set; }
 
@@ -30,8 +29,7 @@ namespace Test.UI.Operations.Entity
                 Map(r => r.CostOne);
                 Map(r => r.Cost);
                 Map(r => r.Active);
-                Map(r => r.IdUser);//  ??
-               // References(r => r.User, "IdUser");
+                References(r => r.User, "IdUser");
             }
         }
     }

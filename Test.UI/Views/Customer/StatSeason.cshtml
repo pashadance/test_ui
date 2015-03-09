@@ -1,0 +1,43 @@
+﻿@using Incoding.MvcContrib
+@using Test.UI.Operations.Query
+
+@{
+     string div_statseson_id = "245A37D4-F002-457C-9CD6-5786D755C125";
+     using (var tem = Html.Incoding().Template<GetStatisticsSesonQuery.StatSesonResponse>())
+    {
+        <div id="@div_statseson_id" style="padding: 4px">
+            <style type="text/css">
+                .tmplstat{
+                    color: #000030; 
+                    font-size:18px ; 
+                    }
+            </style>
+            <div class="tmplstat">Статистика </div>
+
+            @using (var each = tem.ForEach())
+            {
+                <div class="tmplstat">за сезон @each.For(r => r.DateSeson)  </div>
+                        <p></p>
+                <div class="tmplstat">Сумма: @each.For(r => r.SumSeson) </div>
+                <div class="tmplstat">Велосипедов: @each.For(r => r.CountBikesSeson)</div>
+                <div class="tmplstat">Записей: @each.For(r => r.CountMens)</div>
+            }
+            
+            <div style="position: relative;  bottom: 2px; top: 2px">
+                 @(Html.When(JqueryBind.Click)
+                    .Direct()
+                    .OnSuccess(
+                        dsl =>
+                        {
+                            dsl.WithId(div_statseson_id).Core().JQuery.Manipulation.Remove();
+                            dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().JQuery.Css.Set("opacity", 0);
+                           // dsl.WithId("85136C08-5A41-41A2-B188-30602CC0945F").Core().Trigger.Invoke(JqueryBind.Incoding);
+                        })
+                    .AsHtmlAttributes()
+                    .ToButton("Закрыть")
+                    )
+            </div>
+       </div>
+    }
+    
+}

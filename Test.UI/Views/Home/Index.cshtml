@@ -4,6 +4,7 @@
 @using Incoding.MvcContrib
 @using Test.UI.Operations
 @using Test.UI.Operations.Command
+@using Test.UI.Operations.Query
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     string styleName = Guid.NewGuid().ToString();
@@ -11,8 +12,18 @@
     string table_id = "4F1C89FC-D8F4-46A1-B82B-035B1530277B";
     string txt_name_id = "2B08527B-1C00-4F8B-93EA-22745779CD8A";
     string txt_sername_id = "EC3EBC87-AAF2-4E45-B887-1043DA37BEA9";
+    string txt_otch_id = "D04B8D33-727D-4DFC-AC02-6497F3B9AF2A";
     string dd_count_id = "908D0C72-8DEF-40B4-AF01-837BDC0FE529";
     string dd_price_id = "A4C50261-7095-41A4-903B-1D31BC21E5AF";
+    string stat_today_id = "85136C08-5A41-41A2-B188-30602CC0945F";
+    string stat_seson_id = "0007836C-DD6C-4E91-80D6-30B9E462FD1F";
+    string stat_custom_id = "13E68758-289E-4B43-B540-E62B795B3F68";
+    string chbday = "6A2A0E8B-56A1-402B-A016-476A6CA68CB0";
+    string chbnight = "189180FC-998B-4D1A-9A91-22DE0D777890";
+    string chbsutki = "74B16CA9-2E3A-488D-9B21-496DC16946B3";
+    
+
+    string border_fatness = "2px";
 
    List< SelectListItem >selectList_count = new List<SelectListItem>();
     for (int i = 1; i < 51; i++)
@@ -26,8 +37,12 @@
     }
   
 }
+<style type="text/css">
+ .inputstl{color: #000030; 
+           font-size:19px ; }
+</style>
 <div style="position: absolute; left:10%;top:10%">
-    <div style="position: absolute; width: 450px; padding: 5px; left:190px; background-color: #d5d5d5; border: solid 4px #708090;">
+    <div style="position: absolute; width: 520px; padding: 5px; left:193px; background-color: #ccd6eb; border: solid @border_fatness #708090;">
        
          @(Html.When(JqueryBind.InitIncoding)
             .AjaxGet(Url.Dispatcher().Query(new GetCustomersQuery()).AsJson())
@@ -40,53 +55,162 @@
             .ToDiv())
     </div>
     
-    <div style="position: absolute; padding: 5px; height:190px; width: 170px; border: solid 4px #708090; background-color: #c0c0c0">
+    <div style="position: absolute; padding: 5px; height:275px; width: 173px;background-color: #b2c2e0; border: solid @border_fatness #708090; ">
         
-        
-        <div style="padding-bottom:5px">
-            Введите имя
-            <div tyle="position: relative">@(Html.TextBox("name",null,new { id = txt_name_id}))</div>
-        </div>
-        
-        <div style=" padding-bottom:5px">
+       <div class="inputstl" style=" padding-bottom:5px">
             Введите фамилию 
-            <div style="position: relative;">@(Html.TextBox("sername",null,new { id = txt_sername_id})) </div>
+           <div style="position: relative;">
+         
+                   @(
+                       Html.TextBox("sername", null, new {id = txt_sername_id}))
+              
+           </div>
+        @{/*
+               @(Html.When(JqueryBind.KeyUp)
+                 .AjaxGet(Url.Dispatcher().Query( new GetSimilarSernamesQuery()
+                 {RequiredName = Selector.Jquery.Id(txt_sername_id).Val()}).AsJson())
+                 .OnSuccess(dsl =>
+                 {
+                     dsl.WithId(txt_sername_id).Core().Insert.For<GetSimilarSernamesQuery.SimilarResponse>(r => r.ResultSername).Val();
+                     dsl.WithId(txt_name_id).Core().Insert.For<GetSimilarSernamesQuery.SimilarResponse>(r => r.ResultName).Val();
+                     dsl.WithId(txt_otch_id).Core().Insert.For<GetSimilarSernamesQuery.SimilarResponse>(r => r.ResultFathername).Val();
+                     dsl.Self().Core().Trigger.Incoding();
+                 })
+                 .AsHtmlAttributes(new { id = txt_sername_id})
+                 .ToTextBox()
+                 )
+                */} 
+       </div>
+
+        <div class="inputstl" style="padding-bottom:5px">
+            Введите имя
+            <div style="position: relative">@(
+    Html.TextBox("name",null,new { id = txt_name_id}))</div>
+        </div>
+
+        <div class="inputstl" style="padding-bottom:5px">
+            Введите отчество
+            <div style="position: relative">@(
+    Html.TextBox("fathername",null,new { id = txt_otch_id}))</div>
         </div>
         
-        <div style="padding-bottom:5px">
-            Количество 
-            <div style="position: relative; left:15px">@(
-    Html.DropDownList("count",selectList_count,new { id = dd_count_id, name ="count"})) </div>
+        <div class="inputstl" style="position:relative;padding-bottom:5px; left:10px">
+            Кол-во 
+            <div style="position: relative; left:5px">@(
+    Html.DropDownList("count",selectList_count,new { id = dd_count_id})) </div>
         </div >
         
-        <div style="position:absolute;left:95px; top:95px; padding-bottom:5px">
+        <div class="inputstl" style="position:relative; padding-bottom:0px; left:10px ">
             Тариф
-            <div style="position: relative">@(
+            <div style="position: relative; left:2px">@(
     Html.DropDownList("price",selectList_price,new { id = dd_price_id, name="price"})) </div>
         </div>
         
-        <div style="position: relative; top:5px; left:30px">
+        <div class="inputstl" style="position: absolute; right: 20px; bottom: 40px">
+            <div>  @(Html.When(JqueryBind.Submit)
+                         .Direct()
+                         .AsHtmlAttributes(new {id = chbday})
+                         .ToCheckBox(true)
+                         )Часы</div>
+
+            <div>  @(Html.When(JqueryBind.Submit)
+                         .Direct()
+                         .AsHtmlAttributes(new {id = chbday})
+                         .ToCheckBox(false)
+                         )День</div>
+          
+            <div>  @(Html.When(JqueryBind.Submit)
+                         .Direct()
+                         .AsHtmlAttributes(new {id = chbnight})
+                         .ToCheckBox(false)
+                         )Ночь</div>
+
+            <div>  @(Html.When(JqueryBind.Submit)
+                         .Direct()
+                         .AsHtmlAttributes(new {id = chbsutki})
+                         .ToCheckBox(false)
+                         )Сутки</div>
+          
+        </div>
+
+        <div  style="position: absolute; bottom:5px; left: 20px; ">
+           
+
             @(Html.When(JqueryBind.Click)
                   .AjaxGet(Url.Dispatcher().Push(new ItemAppendCommand(
-                      Selector.Jquery.Id(txt_name_id).Val(),
                       Selector.Jquery.Id(txt_sername_id).Val(),
+                      Selector.Jquery.Id(txt_name_id).Val(),
+                      Selector.Jquery.Id(txt_otch_id).Val(),
                       Selector.Jquery.Id(dd_count_id).Val(),
                       Selector.Jquery.Name("price").Val()
                       )))
-
+                      //.OnBegin(dsl=>dsl.Self().Core().JQuery.Css.Set("height","40px"))
                   .OnSuccess(dsl =>
                   {
                       dsl.WithId(table_id).Core().Trigger.Invoke(JqueryBind.Incoding);
-                      dsl.WithId(txt_name_id).Core().JQuery.Attributes.Val(string.Empty);
-                      dsl.WithId(txt_sername_id).Core().JQuery.Attributes.Val(string.Empty);
+                      dsl.WithId(txt_sername_id).Core().JQuery.Attributes.Val(null);
+                      dsl.WithId(txt_name_id).Core().JQuery.Attributes.Val(null);
+                      dsl.WithId(txt_otch_id).Core().JQuery.Attributes.Val(null);
                       dsl.WithId(dd_count_id).Core().JQuery.Attributes.Val(1.ToString());
+                      
                   })
+                  .AsHtmlAttributes(new {name="append",})
+                  .ToButton("Добавить запись"))
+
+            @(Html.When(JqueryBind.InitIncoding)
+                  .Direct()
+                  .OnBegin(r => r.WithName("append").Core().JQuery.Css.Set("width", "150px"))
                   .AsHtmlAttributes()
-                  .ToButton("Добавить"))
+                  .ToDiv())
+            
         </div>
     </div>
     
-    <div id="89E66E7D-B3DA-46E5-ACDD-E3025EFD2033" style="position: absolute; left: 660px; width: 180px; height: 200px; background-color: #c8c8c8; border: solid 3px #708090 ">
+    <div id="89E66E7D-B3DA-46E5-ACDD-E3025EFD2033" style="position: absolute;  opacity: 0; left:735px; width: 200px; height: 240px; background-color: #c2d1ff; border: solid @border_fatness #708090  ">
+    </div>
+   
+    <style type="text/css">
+        .stat{color: #000030; 
+            font-size:17px ; }
+    </style>
+    <div class="stat" style=" position: relative; top: 295px; padding: 5px; width: 173px;background-color: #b2c2e0; border: solid @border_fatness #708090;">
+        <div> @(Html.When(JqueryBind.Click)
+                    .AjaxGet(Url.Dispatcher().Query(new GetStatisticsTodayQuery()).AsJson())
+                    .OnSuccess(dsl =>
+                    {
+                        var stattoday = Url.Dispatcher().AsView("~/Views/Customer/StatToday.cshtml");
+                        dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().Insert.WithTemplateByUrl(stattoday).Html();
+                        dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().JQuery.Css.Set("opacity", 1);
+                    })
+                    .AsHtmlAttributes(new { id = stat_today_id })
+                    .ToLink("Статистика за сегодня"))
+        </div>
+        <div>
+            @(Html.When(JqueryBind.Click)
+                  .AjaxGet(Url.Dispatcher().Query(new GetStatisticsSesonQuery()).AsJson())
+                  .OnSuccess(dsl =>
+                  {
+                      var statseson = Url.Dispatcher().AsView("~/Views/Customer/StatSeason.cshtml");
+                      dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().Insert.WithTemplateByUrl(statseson).Html();
+                      dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().JQuery.Css.Set("opacity", 1);
+                  })
+                  .AsHtmlAttributes(new { id = stat_seson_id })
+                  .ToLink("Статистика за сезон"))
+        </div>
+        <div>
+            @(Html.When(JqueryBind.Click)
+                  .Direct()
+                  .OnSuccess(dsl =>
+                  {
+                      var statcust = Url.Dispatcher().AsView("~/Views/Customer/StatCustom.cshtml");
+                      dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().Insert.WithTemplateByUrl(statcust).Html();
+                      dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().JQuery.Css.Set("opacity", 1);
+                  })
+                  .AsHtmlAttributes(new { id = stat_custom_id })
+                  .ToLink("Выборка статистики"))
+        </div>
+    </div>
+    <div id="9ED54E9F-4FF8-466B-B8A3-432F6DA92444" style="position: relative; opacity: 0; top: 300px; padding: 5px;  width: 173px;background-color: #ccd6eb; border: solid @border_fatness #708090; ">
         
     </div>
 </div>

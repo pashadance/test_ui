@@ -1,0 +1,83 @@
+﻿@using Incoding.MvcContrib
+@using Test.UI.Operations
+@using Test.UI.Operations.Command
+@using Test.UI.Operations.Query
+
+@{
+     string div_statcustom_id = "077291B9-6398-40F7-AB23-C2202F50B963";
+
+     List<SelectListItem> sel_day = new List<SelectListItem>();
+     //sel_day.Add(new SelectListItem() { Text = DateTime.Now.Day.ToString(), Value = DateTime.Now.Day.ToString() });
+     for (int i = 1; i < 32; i++)
+     {
+         sel_day.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString() });
+     }
+     
+     List<SelectListItem> sel_month = new List<SelectListItem>();
+     //sel_month.Add(new SelectListItem() { Text = DateTime.Now.Month.ToString(), Value = DateTime.Now.Month.ToString() });
+     for (int i = 1; i < 13; i++)
+     {
+         sel_month.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString() });
+     }
+     
+     List<SelectListItem> sel_year = new List<SelectListItem>();
+     //sel_year.Add(new SelectListItem() { Text = DateTime.Now.Year.ToString(), Value = DateTime.Now.Year.ToString() });
+     for (int i = DateTime.Now.Year; i >2001; i--)
+     {
+         sel_year.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString() });
+     }
+     
+     using (var tem = Html.Incoding().Template<GetStatisticsSesonQuery.StatSesonResponse>())
+    {
+        <div id="@div_statcustom_id" style="padding: 2px">
+            <style type="text/css">
+                .tmplstat{
+                    color: #000030; 
+                    font-size:17px ; 
+                    }
+            </style>
+            <div class="tmplstat">Выберите интервал</div>
+            
+            <div style="position: relative; padding-top: 5px">
+                <div class="tmplstat"> Начиная с </div>
+                <div class="tmplstat">День Месяц Год</div>
+                <div> @(Html.DropDownList("day_start",sel_day)) @(Html.DropDownList("month_start",sel_month)) @(Html.DropDownList("year_start",sel_year))</div>
+            </div>
+
+            <div style="position: relative; padding-top: 5px">
+                <div class="tmplstat"> Заканчивая </div>
+                <div class="tmplstat">День Месяц Год</div>
+                <div> @(Html.DropDownList("day_end",sel_day)) @(Html.DropDownList("month_end",sel_month)) @(Html.DropDownList("year_end",sel_year))</div>
+            </div>
+
+                <div style="position: relative; right: 0; bottom: 2px; padding-top: 10px">
+                    @(Html.When(JqueryBind.Click)
+                          .AjaxGet(Url.Dispatcher().Query( new GetStatisticsCustomQuery()
+                          {
+                              StartDay = Selector.Jquery.Name("day_start").Val(),
+                              StartMonth = Selector.Jquery.Name("month_start").Val(),
+                              StartYear = Selector.Jquery.Name("year_start").Val(),
+                              EndDay = Selector.Jquery.Name("day_end").Val(),
+                              EndMonth = Selector.Jquery.Name("month_end").Val(),
+                              EndYear = Selector.Jquery.Name("year_end").Val()
+                          }).AsJson())
+                          .OnSuccess(
+                              dsl =>
+                              {
+                                  var urlstatcustres = Url.Dispatcher().AsView("~/Views/Customer/statcustomresult.cshtml");
+                                  
+                                  dsl.WithId(div_statcustom_id).Core().Insert.WithTemplateByUrl(urlstatcustres).Html();
+                                  //dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().JQuery.Css.Set("opacity", 0);
+                                  // dsl.WithId("85136C08-5A41-41A2-B188-30602CC0945F").Core().Trigger.Invoke(JqueryBind.Incoding);
+                              })
+                          .AsHtmlAttributes()
+                          .ToButton("Показать")
+                          )
+                
+                </div>
+
+          
+       </div>
+    }
+    
+}

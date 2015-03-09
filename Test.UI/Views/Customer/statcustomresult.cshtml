@@ -1,0 +1,44 @@
+﻿@using Incoding.MvcContrib
+@using Test.UI.Operations
+@using Test.UI.Operations.Command
+@using Test.UI.Operations.Query
+
+@{
+     string div_statcustomres_id = "1CEB9DE2-F522-40A1-975C-12896FB6C75F";
+     using (var tem = Html.Incoding().Template<GetStatisticsCustomQuery.StatCustomResponse>())
+    {
+        <div id="@div_statcustomres_id" style="padding: 4px">
+            <style type="text/css">
+                .tmplstat{
+                    color: #000030; 
+                    font-size:17px ; }
+            </style>
+            <div class="tmplstat">Выборка статистики</div>
+            @using (var each = tem.ForEach())
+            {
+                <div class="tmplstat">@each.For(r=>r.StaartDate)  </div>
+              <div class="tmplstat">@each.For(r=>r.EndDate) </div>
+                <p></p>
+                <div class="tmplstat">Сумма: @each.For(r => r.SumCustom) </div>
+                <div class="tmplstat">Велосипедов: @each.For(r => r.CountBikesCustom)</div>
+                <div class="tmplstat">Записей: @each.For(r => r.CountMensCustom)</div>
+            }
+            
+            <div style="position: relative;  bottom: 2px; top: 2px">
+                @(Html.When(JqueryBind.Click)
+                      .Direct()
+                      .OnSuccess(
+                          dsl =>
+                          {
+                              dsl.WithId(div_statcustomres_id).Core().JQuery.Manipulation.Remove();
+                              dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().JQuery.Css.Set("opacity", 0);
+                              // dsl.WithId("85136C08-5A41-41A2-B188-30602CC0945F").Core().Trigger.Invoke(JqueryBind.Incoding);
+                          })
+                      .AsHtmlAttributes()
+                      .ToButton("Закрыть")
+                      )
+            </div>
+        </div>
+    }
+    
+}
