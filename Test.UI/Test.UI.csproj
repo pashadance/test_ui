@@ -147,14 +147,17 @@
     <Compile Include="Operations\Command\AppendEntitiResultCommand.cs" />
     <Compile Include="Operations\Command\DeactivateTimeTrackByIdCommand.cs" />
     <Compile Include="Operations\Entity\TimeTrack.cs" />
+    <Compile Include="Operations\Query\GetAllFIOQuery.cs" />
+    <Compile Include="Operations\Query\GetInstantTimeQuery.cs" />
     <Compile Include="Operations\Query\GetResultQuery.cs" />
-    <Compile Include="Operations\Query\GetSimilairNamesQuery.cs" />
+    <Compile Include="Operations\Query\GetSimilairSernamesQuery.cs" />
     <Compile Include="Operations\Command\ItemAppendCommand.cs" />
     <Compile Include="Operations\Entity\User.cs" />
     <Compile Include="Operations\Query\GetCustomersQuery.cs" />
     <Compile Include="Operations\Query\GetStatisticsCustomQuery.cs" />
     <Compile Include="Operations\Query\GetStatisticsSesonQuery.cs" />
     <Compile Include="Operations\Query\GetStatisticsTodayQuery.cs" />
+    <Compile Include="Operations\Validation\AddInputCommandValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +204,7 @@
     <Content Include="Views\Customer\StatSeason.cshtml" />
     <Content Include="Views\Customer\StatCustom.cshtml" />
     <Content Include="Views\Customer\statcustomresult.cshtml" />
+    <Content Include="Views\Customer\FIO.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

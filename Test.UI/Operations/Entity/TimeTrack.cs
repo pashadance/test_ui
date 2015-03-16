@@ -13,6 +13,7 @@ namespace Test.UI.Operations.Entity
         public virtual string CostOne { get; set; }
         public virtual string Cost { get; set; }
         public virtual bool Active { get; set; }
+        public virtual string Period { get; set; }
         public virtual User User { get; set; }
 
         public class TimeTrackMap : NHibernateEntityMap<TimeTrack>
@@ -29,6 +30,7 @@ namespace Test.UI.Operations.Entity
                 Map(r => r.CostOne);
                 Map(r => r.Cost);
                 Map(r => r.Active);
+                Map(r => r.Period);
                 References(r => r.User, "IdUser");
             }
         }

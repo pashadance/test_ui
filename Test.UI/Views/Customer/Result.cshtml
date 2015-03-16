@@ -13,33 +13,61 @@
             <style type="text/css">
                 .bold{
                     color: #000030; 
-                    font-size:20px ; 
+                    font-size:20px;
+                    font-weight: 700;
+                    text-align: center
+                    }
+                .bold1{
+                    color: #000030; 
+                    font-size:19px; 
+                    text-align: center
                     }
             </style>
 
             @using (var each = tem.ForEach())
             {
-                <div class="bold"> @each.For(r => r.Sername) @each.For(r => r.Name)</div>
-                
-                <div class="bold">  @each.For(r => r.FatherName)</div>
-                <div>Количество: @each.For(r => r.Count)</div>
-                <div>Тариф: @each.For(r => r.Price)</div>
-                <div>Старт: @each.For(r => r.StartTime)</div>
-                <div>Стоп: @each.For(r => r.EndTime)</div>
-                <div>Длительность: @each.For(r => r.Duration)</div>
-                <div>Итог с каждого: @each.For(r => r.CostOne)</div>
-                <div class="bold">Общий итог: @each.For(r => r.Cost)</div>
+                <div class="bold" style="word-wrap: break-word;"> @each.For(r => r.Sername) @each.For(r => r.Name)</div>
+                <div class="bold" style="word-wrap: break-word;">  @each.For(r => r.FatherName)</div>
+                <div class="bold1" style="padding-top:5px">Количество: @each.For(r => r.Count)</div>
+                <div class="bold1">Тариф: @each.For(r => r.Price) p. @each.For(r => r.Period)</div>
+                <div class="bold1">Старт: @each.For(r => r.StartTime)</div>
+                <div class="bold1">Стоп: @each.For(r => r.EndTime)</div>
+                <div class="bold1">Длительность: @each.For(r => r.Duration)</div>
+                <div class="bold1">@each.For(r => r.CostOne)</div>
+                <div class="bold" style="padding-top:5px">Общий итог: @each.For(r => r.Cost)</div>
             }
             
-            <div style="position: absolute; right: 6px; top: 6px">
-                 @(Html.When(JqueryBind.Click)
+            <div style="position: absolute; right: 7px; top: 15px">
+                 @(Html
+                  .When(JqueryBind.InitIncoding)
+                                .Direct()
+                                .OnBegin(dsl => {
+                    dsl.Self().Core().JQuery.Css.Set("border-radius", "9px");
+                    dsl.Self().Core().JQuery.Css.Set("color", "#0034D6");
+                    dsl.Self().Core().JQuery.Css.Set("background", "transparent");
+                    dsl.Self().Core().JQuery.Css.Set("border", "solid 1px #0034D6");
+                    dsl.Self().Core().JQuery.Css.Set("font-weight", "600");
+                }).When(JqueryBind.MouseEnter)
+                .Direct().OnBegin(r =>
+                {
+                    r.Self().Core().JQuery.Css.Set("color", "#c2d1ff");
+                    r.Self().Core().JQuery.Css.Set("background", "#0034D6");
+                })
+                .When(JqueryBind.MouseLeave)
+                  .Direct().OnBegin(r =>
+                  {
+                      r.Self().Core().JQuery.Css.Set("color", "#0034D6");
+                      r.Self().Core().JQuery.Css.Set("background", "transparent");
+                      
+                  })
+                 .When(JqueryBind.Click)
                     .Direct()
                     .OnBegin(
                         dsl =>
                         {
                             dsl.WithId(div_result_id).Core().JQuery.Manipulation.Remove();
                             dsl.WithId("89E66E7D-B3DA-46E5-ACDD-E3025EFD2033").Core().JQuery.Css.Set("opacity", 0);
-                            dsl.WithId("85136C08-5A41-41A2-B188-30602CC0945F").Core().Trigger.Incoding();
+                           // dsl.WithId("85136C08-5A41-41A2-B188-30602CC0945F").Core().Trigger.Incoding().If(r => r.Is(() => Selector.Jquery.Id("9ED54E9F-4FF8-466B-B8A3-432F6DA92444")));
                         })
                     .AsHtmlAttributes()
                     .ToButton("OK")

@@ -15,26 +15,26 @@ namespace Test.UI.Operations.Command
         public string Count { get; set; }
         public string Price { get; set; }
         public DateTime Start_time { get; set; }
+        public string Period { get; set; }
         
         public ItemAppendCommand(){}
-        public ItemAppendCommand(string sername,string name, string otch , string count, string price)
+        public ItemAppendCommand(string sername,string name, string otch , string count, string price, string period)
         {
             Sername = sername;
             Name = name;
             FatherName = otch;
             Count = count;
             Price = price;
+            Period = period;
         }
 
         public static string Normalize(string inputString)
         {
-            char[] charsToTrim = { '*', ' ', '\'', '-', '=', '+', '.', ',', '_', '/', '"' };
-            inputString = Regex.Replace(inputString.Trim(charsToTrim), @"[\d]", "", RegexOptions.Compiled);
-            inputString = inputString.Replace("  ", string.Empty);
-            inputString = inputString.Trim().Replace(" ", string.Empty);
+            inputString = Regex.Replace(inputString, @"[\d\W]", "", RegexOptions.Compiled);
+
             if (inputString != string.Empty)
             {
-                inputString = inputString[0].ToString().ToUpper() + inputString.Substring(1);
+                inputString = inputString[0].ToString().ToUpper() + inputString.Substring(1).ToLower();
             }
             return inputString;
         }
@@ -90,10 +90,10 @@ namespace Test.UI.Operations.Command
                     CostOne = "0",
                     Cost = "0",
                     User = userok,
-                    Active = true
+                    Active = true,
+                    Period = Period
                 };
                 Repository.Save(timetr);
-
             }
         }
     }

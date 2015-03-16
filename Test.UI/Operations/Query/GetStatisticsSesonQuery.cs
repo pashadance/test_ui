@@ -18,8 +18,6 @@ namespace Test.UI.Operations.Query
 
         protected override StatSesonResponse ExecuteResult()
         {
-           // StatSesonResponse ssr= new StatSesonResponse();
-
             int summa = 0;
             int kolvo_velov = 0;
             int kolvo_chelovekov = 0;

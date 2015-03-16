@@ -28,7 +28,29 @@
             }
             
             <div style="position: relative;  bottom: 2px; top: 2px">
-                @(Html.When(JqueryBind.Click)
+               
+                 @(Html.When(JqueryBind.InitIncoding)
+                .Direct()
+                .OnBegin(dsl => {
+                    dsl.Self().Core().JQuery.Css.Set("border-radius", "9px");
+                    dsl.Self().Core().JQuery.Css.Set("color", "#0034D6");
+                    dsl.Self().Core().JQuery.Css.Set("background", "transparent");
+                    dsl.Self().Core().JQuery.Css.Set("border", "solid 1px #0034D6");
+                    dsl.Self().Core().JQuery.Css.Set("font-weight", "600");
+                }).When(JqueryBind.MouseEnter)
+                .Direct().OnBegin(r =>
+                {
+                    r.Self().Core().JQuery.Css.Set("color", "#ccd6eb");
+                    r.Self().Core().JQuery.Css.Set("background", "#0034D6");
+                })
+                .When(JqueryBind.MouseLeave)
+                  .Direct().OnBegin(r =>
+                  {
+                      r.Self().Core().JQuery.Css.Set("color", "#0034D6");
+                      r.Self().Core().JQuery.Css.Set("background", "transparent");
+                      
+                  })
+                .When(JqueryBind.Click)
                       .Direct()
                       .OnSuccess(
                           dsl =>

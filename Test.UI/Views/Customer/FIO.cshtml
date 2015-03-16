@@ -1,0 +1,73 @@
+﻿@using FluentNHibernate.Utils
+@using Incoding.Extensions
+@using Incoding.MvcContrib
+@using Test.UI.Operations.Command
+@using Test.UI.Operations.Query
+
+@{
+    
+    //string result_id = "BFB3205E-F956-4C45-AF4C-3D07CC910349";
+    using (var template = Html.Incoding().Template<GetAllFIOQuery.FIO>())
+    {
+        
+    <div>
+       <style type="text/css">
+            .bukvi_enter {
+                color: #EEEA8B; 
+                font-size:15px;
+                padding: 0;
+                text-align: left;
+                    font-weight:500
+                     }
+            .bukvi_leave {
+                color: #C5CFE8; 
+                font-size:15px;
+                padding: 0;
+                text-align: left;
+                font-weight:400
+                    
+                     }
+        </style>
+         
+        @using (var each = template.ForEach())
+        {
+            <div class="bukvi_leave">
+                @(Html.When(JqueryBind.InitIncoding)
+                .Direct()
+                .When(JqueryBind.MouseEnter)
+                .Direct()
+                .OnSuccess(dsl => dsl.Self().Behaviors(inDsl =>
+                  {
+                      inDsl.Core().JQuery.Attributes.RemoveAttr(HtmlAttribute.Class);
+                      inDsl.Core().JQuery.Attributes.AddClass("bukvi_enter");                        
+                  }))
+                .When(JqueryBind.MouseLeave)
+                .Direct()
+                 .OnSuccess(dsl => dsl.Self().Behaviors(inDsl =>
+                  {
+                      inDsl.Core().JQuery.Attributes.RemoveAttr(HtmlAttribute.Class);
+                      inDsl.Core().JQuery.Attributes.AddClass("bukvi_leave");                        
+                  }))
+                .When(JqueryBind.Click)
+                .Direct()
+                .OnSuccess(dsl =>
+                {
+                    dsl.WithId("EC3EBC87-AAF2-4E45-B887-1043DA37BEA9").Core().JQuery.Attributes.Val(each.For(r => r.Sername));
+                    dsl.WithId("2B08527B-1C00-4F8B-93EA-22745779CD8A").Core().JQuery.Attributes.Val(each.For(r => r.Name));
+                    dsl.WithId("D04B8D33-727D-4DFC-AC02-6497F3B9AF2A").Core().JQuery.Attributes.Val(each.For(r => r.FatherName));
+                   
+                })
+                .AsHtmlAttributes()
+                .ToLabel(each.For(r=>r.FamiliaIO)))
+              @{/* <div style="position: absolute;left:0">
+                    @(Html.When(JqueryBind.Click)
+                    
+                    )
+                </div>
+                  */} 
+            </div>
+        }
+    
+       </div>
+    }
+}

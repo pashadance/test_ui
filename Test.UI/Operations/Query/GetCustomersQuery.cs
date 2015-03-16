@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Incoding.CQRS;
 using Test.UI.Operations.Entity;
@@ -16,25 +17,49 @@ namespace Test.UI.Operations.Query
             public string FatherName { get; set; }
             public string Count { get; set; }
             public string Price { get; set; }
-            public string Start_time { get; set; }        
+            public string Start_time { get; set; }
+            public string Period { get; set; }
+            public string PeriodColor { get; set; } 
         }
 
         protected override List<Response> ExecuteResult()
         {
+            CultureInfo ci = new CultureInfo("ru-RU");
+            string stime = "";
             List<Response> resp = new List<Response>();
 
             List<TimeTrack> tt = Repository.Query<TimeTrack>().ToList();
             foreach (var timetrack in tt)
             {
-                if (timetrack.Active)
-                    resp.Add(new Response()
+                    if (timetrack.Period != "час" & timetrack.Active)
                     {
-                        IdUser = timetrack.User.Id,
-                        Id = timetrack.Id,
-                        Count = timetrack.Count,
-                        Price = timetrack.Price,
-                        Start_time = timetrack.StartTime.ToString().Substring(timetrack.StartTime.ToString().IndexOf(" "))
-                    });
+                        stime = timetrack.StartTime.Day.ToString() + "." + timetrack.StartTime.Month.ToString() + "." +
+                                timetrack.StartTime.Year.ToString() + " " + timetrack.StartTime.ToString("T", ci);
+                        resp.Add(new Response()
+                        {
+                            IdUser = timetrack.User.Id,
+                            Id = timetrack.Id,
+                            Count = timetrack.Count,
+                            Price = timetrack.Price,
+                            Start_time = stime,
+                            Period = timetrack.Period,
+                            PeriodColor = "#000030"
+                        });
+                    }
+                    if (timetrack.Period == "час" & timetrack.Active)
+                    {
+                        stime = timetrack.StartTime.ToString("T", ci);
+                        resp.Add(new Response()
+                        {
+                            IdUser = timetrack.User.Id,
+                            Id = timetrack.Id,
+                            Count = timetrack.Count,
+                            Price = timetrack.Price,
+                            Start_time = stime,
+                            Period = timetrack.Period,
+                            PeriodColor = "#E04F00"
+                        });
+                    }
             }
 
             List<User> u = Repository.Query<User>().ToList();
@@ -51,6 +76,7 @@ namespace Test.UI.Operations.Query
                     }
                 }
             }
+            resp.Sort((a,b)=>a.Start_time.CompareTo(b.Start_time));
             return resp;
         }
     }

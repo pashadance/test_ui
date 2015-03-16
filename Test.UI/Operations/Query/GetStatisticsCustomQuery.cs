@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Test.UI.Operations.Entity;
 using Incoding.CQRS;
 
@@ -15,7 +14,7 @@ namespace Test.UI.Operations.Query
         public string EndDay { get; set; }
         public string EndMonth { get; set; }
         public string EndYear { get; set; }
-        //public int StartDay { get; set; }
+        
         private string[] month = new string[12]
         {
             "января", "февраля",
@@ -97,5 +96,4 @@ namespace Test.UI.Operations.Query
             return d;
         }
     }
-  
 }

@@ -1,63 +1,132 @@
-﻿@using Incoding.MvcContrib
+﻿@using Incoding.Extensions
+@using Incoding.MvcContrib
+@using JetBrains.Annotations
 @using Test.UI.Operations.Command
 @using Test.UI.Operations.Query
 
 @{
     string table_id = " D7A6C343-5944-4BB9-84E0-50F0287490C6";
-    string result_id = "1BBE9F09-D78C-44B4-916D-A9F030441AD6";
-    string btn_stop_name = "45C41990-1427-42BF-AC62-1ACB6A43F78E";
+   
+    string btn_stop_name = Guid.NewGuid().ToString();
     //string result_id = "BFB3205E-F956-4C45-AF4C-3D07CC910349";
     using (var template = Html.Incoding().Template<GetCustomersQuery.Response>())
     {
         
-    <table id="@table_id">
-        <thead>
+    <table id="@table_id" rules="rows" >
+       <style type="text/css">
+            .maindiv {
+                color: #000030; 
+                font-size:18px;
+                padding: 0; 
+                text-align: center
+                     }
+            .maindivhead {
+                color: #000030; 
+                font-size:19px ;
+                font-weight: 600;
+                padding: 0; 
+                text-align: center
+            }
+            .instantdiv {
+                  color: #0000c0;  
+                    font-size:15px ;
+                   font-weight: 500;
+                   padding: 0; 
+            }
+        </style>
+         <thead>
             <tr>
-                <th>Фамилия</th><th>Имя</th><th>Отчество</th><th>Количество</th><th>Тариф</th><th>Время_старта</th><th></th>
+                <th><div class="maindivhead" style="width: 114px;  "> Фамилия</div></th>
+                <th><div class="maindivhead" style="width: 100px;"> Имя</div></th>
+                <th><div class="maindivhead" style="width: 120px; ">Отчество</div></th>
+                <th><div class="maindivhead" style="width: 70px; "> Кол-во</div></th>
+                <th><div class="maindivhead" style="width: 90px; "> Тариф</div></th>
+                <th><div class="maindivhead" style="width: 120px;">Время старта</div></th>
+                <th><div style="width:70px;   text-align: center"></div></th>
             </tr>
         </thead>
         @using (var each = template.ForEach())
         {
-            <tr>
-                <td>@each.For(r => r.Sername)</td>
-                <td>@each.For(r => r.Name)</td>
-                <td>@each.For(r => r.FatherName)</td>
-                <td>@each.For(r=>r.Count)</td>
-                <td>@each.For(r=>r.Price)</td>
-                <td>@each.For(r=>r.Start_time)</td>
-                <td>
-                    @(Html.When(JqueryBind.None)
-                          .AjaxGet(Url.Dispatcher().Query(new GetResultQuery()
-                          {Id = each.For(r=>r.Id)}).AsJson())
-                          .OnSuccess(dsl =>
-                          {
-                              var urlTmplu = Url.Dispatcher().AsView("~/Views/Customer/Result.cshtml");
-                              dsl.WithId("89E66E7D-B3DA-46E5-ACDD-E3025EFD2033").Core().JQuery.Css.Set("opacity", 1);   
-                              dsl.WithId("89E66E7D-B3DA-46E5-ACDD-E3025EFD2033").Core().Insert.WithTemplateByUrl(urlTmplu).Html();
-                          })
-                          .AsHtmlAttributes(new { id = result_id })
-                          .ToDiv())
-
-                    @(Html.When(JqueryBind.Click)
-                          .AjaxPost(Url.Dispatcher()
-                              .Push(new DeactivateTimeTrackByIdCommand()
-                              {
-                                  deactivate_id = each.For(r=>r.Id)
-                              }))
-                          .OnSuccess(dsl =>
-                          {
-                              // dsl.Utilities.Window.Alert("Внимание, поездка остановлена!");
-                              dsl.WithId(result_id).Core().Trigger.Invoke(JqueryBind.None);
-                              dsl.With(s => s.Self().Closest(r => r.Tag(HtmlTag.Tr)))
-                                  .Core().JQuery.Manipulation.Remove();
-                                  
-                          })
-                          .AsHtmlAttributes(new {name = btn_stop_name})
-                          .ToButton("STOP"))
-                        
-                </td>
-            </tr>
-                
+            <tr >
+            <td><div class="maindiv" style="width: 114px; word-wrap: break-word;">@each.For(r => r.Sername)</div></td>
+            <td><div class="maindiv" style="width: 100px;  word-wrap: break-word;">@each.For(r => r.Name)</div></td>
+            <td><div class="maindiv" style="width: 120px;  word-wrap: break-word;">@each.For(r => r.FatherName)</div></td>
+            <td><div class="maindiv" style="width: 70px;">@each.For(r=>r.Count)</div></td>
+            <td><div class="maindiv" style="width: 90px;">@each.For(r=>r.Price) р.
+                    <div style="color:@each.For(r=>r.PeriodColor)">@each.For(r=>r.Period)</div></div></td>
+            <td><div class="maindiv" style="width: 120px;">@each.For(r=>r.Start_time)
+                    <div id="timer" class="instantdiv" onload="instant()">  
+                       
+                        @(Html.When(JqueryBind.InitIncoding)
+                                .AjaxGet(Url.Dispatcher().Query(new GetInstantTimeQuery(){id = each.For(r=>r.Id)}).AsJson())
+                                .OnBegin(r => 
+                                {
+                                    r.Self().Core().JQuery.Css.Set("background", "transparent");
+                                    r.Self().Core().JQuery.Css.Set("color", "#0000c0");
+                                    r.Self().Core().JQuery.Css.Set("border-radius", "4px");
+                                })
+                                .OnSuccess(dsl =>dsl.Self().Core().Insert.For<GetInstantTimeQuery.InstantTimeResult>(r => r.update).Html())
+                                .When(JqueryBind.MouseEnter)
+                                .AjaxGet(Url.Dispatcher().Query(new GetInstantTimeQuery(){id = each.For(r=>r.Id)}).AsJson())
+                                .OnBegin(r =>r.Self().Core().JQuery.Css.Set("color", "#b22222"))
+                                .OnSuccess(dsl =>dsl.Self().Core().Insert.For<GetInstantTimeQuery.InstantTimeResult>(r => r.InstantTime).Html())
+                                .When(JqueryBind.MouseLeave)
+                                .AjaxGet(Url.Dispatcher().Query(new GetInstantTimeQuery(){id = each.For(r=>r.Id)}).AsJson())
+                                .OnBegin(r =>r.Self().Core().JQuery.Css.Set("color", "#0000c0"))
+                                .OnSuccess(r=> r.Self().Core().Insert.For<GetInstantTimeQuery.InstantTimeResult>(n => n.update).Html())
+                                .AsHtmlAttributes()
+                                .ToLabel()
+                              )
+                          
+                    </div></div>
+            </td>
+            <td>
+               @(Html.When(JqueryBind.Click)
+                      .AjaxPost(Url.Dispatcher().Push(new DeactivateTimeTrackByIdCommand(){deactivate_id = each.For(r=>r.Id)}))
+                      .OnSuccess(dsl =>
+                      {
+                          dsl.Self().Core().Trigger.Invoke(JqueryBind.None);
+                          dsl.With(s => s.Self().Closest(r => r.Tag(HtmlTag.Tr))).Core().JQuery.Manipulation.Remove();
+                      })
+                              
+                      .When(JqueryBind.None)
+                      .AjaxGet(Url.Dispatcher().Query(new GetResultQuery(){Id = each.For(r=>r.Id)}).AsJson())
+                      .OnSuccess(dsl =>
+                      {
+                          var urlTmplu = Url.Dispatcher().AsView("~/Views/Customer/Result.cshtml");
+                          dsl.WithId("89E66E7D-B3DA-46E5-ACDD-E3025EFD2033").Core().JQuery.Css.Set("opacity", 1);   
+                          dsl.WithId("89E66E7D-B3DA-46E5-ACDD-E3025EFD2033").Core().Insert.WithTemplateByUrl(urlTmplu).Html();
+                      })
+                             
+                      .When(JqueryBind.InitIncoding)
+                      .Direct()
+                      .OnBegin(r =>
+                      {
+                          r.Self().Core().JQuery.Css.Set("border", "solid 2px #E61200");
+                          r.Self().Core().JQuery.Css.Set("background", "transparent");
+                          r.Self().Core().JQuery.Css.Set("font-size", "19px");
+                          r.Self().Core().JQuery.Css.Set("color", "#E61200");
+                          r.Self().Core().JQuery.Css.Set("font-weight", "600");
+                          r.Self().Core().JQuery.Css.Set("border-radius", "14px");
+                      })
+                      .When(JqueryBind.MouseEnter)
+                      .Direct().OnBegin(r =>
+                      {
+                          r.Self().Core().JQuery.Css.Set("background", "#E61200");
+                          r.Self().Core().JQuery.Css.Set("color", " #ccd6eb");
+                      })
+                      .When(JqueryBind.MouseLeave)
+                      .Direct().OnBegin(r =>
+                      {
+                          r.Self().Core().JQuery.Css.Set("color", "#E61200");
+                          r.Self().Core().JQuery.Css.Set("background", "transparent");
+                                    
+                      })
+                      .AsHtmlAttributes()
+                      .ToButton("STOP"))
+            </td>
+        </tr>
+        
         }
     </table>
        

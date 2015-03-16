@@ -51,7 +51,30 @@
             </div>
 
                 <div style="position: relative; right: 0; bottom: 2px; padding-top: 10px">
-                    @(Html.When(JqueryBind.Click)
+                    
+                    
+                    @(Html.When(JqueryBind.InitIncoding)
+                .Direct()
+                .OnBegin(dsl => {
+                    dsl.Self().Core().JQuery.Css.Set("border-radius", "9px");
+                    dsl.Self().Core().JQuery.Css.Set("color", "#0034D6");
+                    dsl.Self().Core().JQuery.Css.Set("background", "transparent");
+                    dsl.Self().Core().JQuery.Css.Set("border", "solid 1px #0034D6");
+                    dsl.Self().Core().JQuery.Css.Set("font-weight", "600");
+                }).When(JqueryBind.MouseEnter)
+                .Direct().OnBegin(r =>
+                {
+                    r.Self().Core().JQuery.Css.Set("color", "#ccd6eb");
+                    r.Self().Core().JQuery.Css.Set("background", "#0034D6");
+                })
+                .When(JqueryBind.MouseLeave)
+                  .Direct().OnBegin(r =>
+                  {
+                      r.Self().Core().JQuery.Css.Set("color", "#0034D6");
+                      r.Self().Core().JQuery.Css.Set("background", "transparent");
+                      
+                  })
+                  .When(JqueryBind.Click)
                           .AjaxGet(Url.Dispatcher().Query( new GetStatisticsCustomQuery()
                           {
                               StartDay = Selector.Jquery.Name("day_start").Val(),
@@ -75,7 +98,38 @@
                           )
                 
                 </div>
-
+            <div style="position: absolute; right: 5px; bottom: 9px">
+                @(Html.When(JqueryBind.InitIncoding)
+                .Direct()
+                .OnBegin(dsl => {
+                    dsl.Self().Core().JQuery.Css.Set("border-radius", "14px");
+                    dsl.Self().Core().JQuery.Css.Set("color", "#600300");
+                    dsl.Self().Core().JQuery.Css.Set("background", "transparent");
+                    dsl.Self().Core().JQuery.Css.Set("border", "solid 1px #600300");
+                    dsl.Self().Core().JQuery.Css.Set("font-weight", "600");
+                }).When(JqueryBind.MouseEnter)
+                .Direct().OnBegin(r =>
+                {
+                    
+                    r.Self().Core().JQuery.Css.Set("background", "#E61200");
+                    r.Self().Core().JQuery.Css.Set("color", "#ccd6eb");
+                    r.Self().Core().JQuery.Css.Set("border", "solid 1px #E61200");
+                })
+                .When(JqueryBind.MouseLeave)
+                  .Direct().OnBegin(r =>
+                  {
+                      r.Self().Core().JQuery.Css.Set("color", "transparent");
+                      r.Self().Core().JQuery.Css.Set("background", "transparent");
+                      r.Self().Core().JQuery.Css.Set("border", "solid 1px #600300");
+                      r.Self().Core().JQuery.Css.Set("color", "#600300");
+                      
+                  })
+                .When(JqueryBind.Click)
+                .Direct().OnBegin(dsl=>dsl.WithId("9ED54E9F-4FF8-466B-B8A3-432F6DA92444").Core().JQuery.Css.Set("opacity", 0))
+                .AsHtmlAttributes()
+                .ToButton("Закрыть")
+                )
+            </div>
           
        </div>
     }
